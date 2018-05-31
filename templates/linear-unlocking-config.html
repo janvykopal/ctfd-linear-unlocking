@@ -12,7 +12,7 @@
 
 	<div class="container">
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-5">
 				<h2>Create new chain:</h2>
 				<div class="form-group">
 					<label for="category">Challenge category:</label>
@@ -39,22 +39,33 @@
 					</div>
 				</form>
 			</div>
-
-			<div class="col-md-5 offset-md-1">
+			
+			<div class="col-md-6 offset-md-1">
 				<h2>Existing chains:</h2>
 				{% for lu_chain in linear_unlocking_chains %}
 					<p>
-						<h4>{{ lu_chain.id }}</h4>
-						<form id="linear_unlocking_delete_form" method="POST" action="/admin/plugins/linear-unlocking/delete">
-							<input id="nonce" name='nonce' type='hidden' value="{{ nonce }}">
-							<button name="lu_id" value="{{ lu_chain.id }}" class="btn btn-danger float-right linear-unlocking-delete-button" type="submit">Delete</button>
-						</form>
+						<div class="form-check float-right mt-2">
+							<div class="checkbox">
+								<input class="form-check-input toggle_hide" value="{{ lu_chain.id }}" type="checkbox"
+									{% if lu_chain.is_hidden %} checked="checked" {% endif %}
+								>
+								Hide locked challenges
+							</div>
+
+							<form id="linear_unlocking_delete_form" method="POST" action="/admin/plugins/linear-unlocking/delete">
+								<input id="nonce" name='nonce' type='hidden' value="{{ nonce }}">
+								<button name="lu_id" value="{{ lu_chain.id }}" class="btn btn-danger float-right linear-unlocking-delete-button" type="submit">Delete</button>
+							</form>
+						</div>
+						
+						<h4>{{ lu_chain.id }} : {{ lu_chain.chain[0].chalcategory }}</h4>
 						{% for chain_entry in lu_chain.chain %}
-							{{ chain_entry.chalid }}, {{ chain_entry.chalname }}, {{ chain_entry.chalcategory }} <br>
+							ID {{ chain_entry.chalid }} : {{ chain_entry.chalname }} <br>
 						{% endfor %}
 					</p>
 				{% endfor %}
 			</div>
+
 		</div>
 	</div>
 {% endblock %}

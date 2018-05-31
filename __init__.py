@@ -74,28 +74,17 @@ def load(app):
         for x in chals:
             jchals[x.id] = (x.name, x.category)
 
-        lu_entries_q = db.session.query(
-                LinearUnlockingEntry.linearunlockid,
-                LinearUnlockingEntry.chalid,
-                LinearUnlockingEntry.requires_chalid
-            )
-        lu_entries = []
-        for x in lu_entries_q:
-            lu_entries.append({
-                'linearunlockid':x.linearunlockid,
-                'chalid':x.chalid,
-                'requires_chalid':x.requires_chalid
-            })
-        # Sort into linear unlock ids
-        linearunlockids = set(map(lambda x:x['linearunlockid'], lu_entries))
         lu_ids = []
-        for lu_id in linearunlockids:
+        lu_models = LinearUnlockingModel.query.all()
+        for lu_model in lu_models:
+            lu_entries = LinearUnlockingEntry.query.filter_by(linearunlockid=lu_model.id).all()
             lu_ids.append({
-                'id':lu_id,
-                'chain':[{  'chalid':m['chalid'],
-                            'chalname':jchals[m['chalid']][0],
-                            'chalcategory':jchals[m['chalid']][1]
-                        } for m in lu_entries if m['linearunlockid'] == lu_id]
+                'id':lu_model.id,
+                'is_hidden':lu_model.is_hidden,
+                'chain':[{  'chalid':m.chalid,
+                            'chalname':jchals[m.chalid][0],
+                            'chalcategory':jchals[m.chalid][1]
+                        } for m in lu_entries]
             })
         return lu_ids
 
@@ -139,6 +128,17 @@ def load(app):
             db.session.commit()
             return redirect('/admin/plugins/linear-unlocking')
 
+    @app.route('/admin/plugins/linear-unlocking/toggle-hide', methods=['POST'])
+    @admins_only
+    def linear_unlocking_togglehide():
+        if request.method == 'POST':
+            lu_id = request.form['lu_id']
+            is_hide = request.form['is_hide'] == "true"
+            lu_model = LinearUnlockingModel.query.filter_by(id=lu_id).first_or_404()
+            lu_model.is_hidden = is_hide
+            db.session.commit()
+            return redirect('/admin/plugins/linear-unlocking')
+
     @app.route('/linearunlockings')
     def get_linear_unlockings():
         response = {'linearunlockings': []}
@@ -157,6 +157,7 @@ def load(app):
         db.session.close()
         return jsonify(response)
 
+    # Overwriting existing route for retrieving chal view
     def chal_view_linearunlocked(chal_id):
         teamid = session.get('id')
 

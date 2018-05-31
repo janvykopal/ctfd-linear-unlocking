@@ -12,7 +12,6 @@ $(document).ready(function(){
             $sel.append($("<option>").attr("value", key).text(value));
         });
         $("#challenge-list").append($sel);
-        $("#add-challenge-button").val(category_name);
         count += 1;
     }
 
@@ -21,6 +20,7 @@ $(document).ready(function(){
         count = 0;
         addChallenge(category_name);
         addChallenge(category_name);
+        $("#add-challenge-button").val(category_name);
     }
     
     $("#category-select").val("--");
@@ -51,4 +51,16 @@ $(document).ready(function(){
         }
     });
 
+    $(".toggle_hide").click(function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var hide = $(this).is(":checked");
+        $.post( script_root + '/admin/plugins/linear-unlocking/toggle-hide', 
+                { "lu_id":this.value, "is_hide":hide, "nonce":$("#nonce").val() }, 
+                function(data) 
+        {
+            location.reload(true);
+        });
+    });
 });

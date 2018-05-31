@@ -26,7 +26,7 @@ function load_linear_unlocking() {
 
             // Disable challenges whose prerequisite is not solved yet
             if (reqid != -1 && user_solves.indexOf(reqid) == -1) {
-                $("#"+wrapperid + " button").prop("disabled", true).css('cursor', 'not-allowed');
+                $("#" + wrapperid + " button").prop("disabled", true).css('cursor', 'not-allowed');
             }
         }
     });
