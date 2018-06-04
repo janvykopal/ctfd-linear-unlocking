@@ -1,4 +1,4 @@
-# Linear Unlocking plugin for CTFd: 
+# User Guide: 
 
 Adds the capability to require challenges to be solved in a specific order.
 
@@ -12,6 +12,8 @@ Locked challenges are disabled for a user when the user has yet to solve the pre
 A challenge is said to be unlocked for a user when it can be attempted by him.
 
 ## As an Admin
+
+`CTFd` -> `Admin` -> `Plugins` -> `Linear Unlocking`
 
 > The admin system is guarded in the web interface using JavaScript, and not guarded in the backend. 
 Admins should not tamper with the code on his web browser as it may cause undesirable behaviors.
@@ -42,6 +44,8 @@ You can delete an existing chain and remove the locked challenge constraints.
 When you delete a challenge that exists in a chain, the chain will automatically be deleted.
 
 ## As a User
+
+`CTFd` -> `Challenges`
 
 > Challenges are guarded both in the web interface and backend by this plugin. 
 Users should not be able to bypass constraints set by the admin by modifying his web browser, such as accessing locked challenges.
