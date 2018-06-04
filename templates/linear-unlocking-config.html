@@ -58,10 +58,12 @@
 							</form>
 						</div>
 						
-						<h4>{{ lu_chain.id }} : {{ lu_chain.chain[0].chalcategory }}</h4>
+						<h4>{{ lu_chain.chain[0].chalcategory }}</h4>
+						<ol>
 						{% for chain_entry in lu_chain.chain %}
-							ID {{ chain_entry.chalid }} : {{ chain_entry.chalname }} <br>
+							<li>{{ chain_entry.chalname }}</li>
 						{% endfor %}
+						</ol>
 					</p>
 				{% endfor %}
 			</div>

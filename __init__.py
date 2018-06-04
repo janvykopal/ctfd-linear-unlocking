@@ -24,11 +24,13 @@ class LinearUnlockingModel(db.Model):
 class LinearUnlockingEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     linearunlockid = db.Column(db.Integer, db.ForeignKey('linear_unlocking_model.id'))
+    position = db.Column(db.Integer)
     chalid = db.Column(db.Integer, db.ForeignKey('challenges.id'))
     requires_chalid = db.Column(db.Integer, db.ForeignKey('challenges.id'))
 
-    def __init__(self, linearunlockid, chalid, requires_chalid):
+    def __init__(self, linearunlockid, position, chalid, requires_chalid):
         self.linearunlockid = linearunlockid
+        self.position = position
         self.chalid = chalid
         self.requires_chalid = requires_chalid
 
@@ -112,11 +114,13 @@ def load(app):
                 db.session.commit()
                 lu_id = lu.id
 
+                position = 1
                 prev_chalid = -1
                 for chalid in lu_chain:
-                    lu_entry = LinearUnlockingEntry(linearunlockid=lu_id, chalid=chalid, requires_chalid=prev_chalid)
+                    lu_entry = LinearUnlockingEntry(linearunlockid=lu_id, position=position, chalid=chalid, requires_chalid=prev_chalid)
                     db.session.add(lu_entry)
                     db.session.commit()
+                    position += 1
                     prev_chalid = chalid
         
         return render_template('linear-unlocking-config.html', 
@@ -227,11 +231,22 @@ def load(app):
 
         db_chals = Challenges.query.filter(or_(Challenges.hidden != True, Challenges.hidden == None)).order_by(Challenges.value).all()
         response = {'game': []}
+        linearunlock_games = {}
+        other_games = []
+
         for chal in db_chals:
             # Skip if is linear locked and should be hidden
+            lu_id = -1
+            lu_position = -1
             is_hidden = False
             lu_entries = LinearUnlockingEntry.query.filter_by(chalid=chal.id).all()
             for lu_entry in lu_entries:
+                # Initialize lu_id if possible, used for sorting the challenges later
+                if lu_id == -1:
+                    lu_model = LinearUnlockingModel.query.filter_by(id=lu_entry.linearunlockid).first()
+                    lu_id = lu_model.id
+                    lu_position = lu_entry.position
+
                 if lu_entry.requires_chalid > -1 and lu_entry.requires_chalid not in solve_ids:
                     lu_model = LinearUnlockingModel.query.filter_by(id=lu_entry.linearunlockid).first()
                     if lu_model.is_hidden:
@@ -242,16 +257,29 @@ def load(app):
 
             tags = [tag.tag for tag in Tags.query.add_columns('tag').filter_by(chal=chal.id).all()]
             chal_type = get_chal_class(chal.type)
-            response['game'].append({
-                'id': chal.id,
-                'type': chal_type.name,
-                'name': chal.name,
-                'value': chal.value,
-                'category': chal.category,
-                'tags': tags,
-                'template': chal_type.templates['modal'],
-                'script': chal_type.scripts['modal'],
-            })
+
+            game = {'id': chal.id,
+                    'type': chal_type.name,
+                    'name': chal.name,
+                    'value': chal.value,
+                    'category': chal.category,
+                    'tags': tags,
+                    'template': chal_type.templates['modal'],
+                    'script': chal_type.scripts['modal'],}
+            if lu_id > -1:
+                if lu_id not in linearunlock_games:
+                    linearunlock_games[lu_id] = []
+                linearunlock_games[lu_id].append((lu_position, game))
+            else:
+                other_games.append(game)
+
+        # Add all linear unlock chain challenges in sorted order first
+        for lu_id, lu_chain_games in linearunlock_games.iteritems():
+            lu_chain_games.sort(key=lambda x: x[0])
+            for position, game in lu_chain_games:
+                response['game'].append(game)
+        # Then add all other games that are not in any chain
+        response['game'].extend(other_games)
 
         db.session.close()
         return jsonify(response)
