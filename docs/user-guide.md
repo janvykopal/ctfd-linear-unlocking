@@ -50,10 +50,10 @@ To access challenges: `CTFd` -> `Challenges`
 > Locked challenges are guarded both in the web interface and backend by this plugin. 
 Users should not be able to bypass constraints (such as viewing locked challenges) set by the admin by modifying his web browser.
 
-### Chains
-
-Challenges in a chain are always listed first within its challenge category, and sorted by the unlocking order of the challenges.
-
 ### Locked challenges
 
 Locked challenges are grayed out (or hidden). You will not be able to view or attempt the challenge until the previous challenge in the chain is solved.
+
+### Challenge ordering
+
+Challenges in a chain are always listed first within its challenge category, and sorted by the unlocking order of the challenges.
