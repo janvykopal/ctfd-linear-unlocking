@@ -1,22 +1,38 @@
-function load_user_solves(cb){
-    $.get(script_root + '/solves', function(data) {
+function updatesolves(cb){
+    $.get(script_root + '/chals/solves', function (data) {
         var solves = $.parseJSON(JSON.stringify(data));
+        var chalids = Object.keys(solves);
 
-        for (var i = solves['solves'].length - 1; i >= 0; i--) {
-            var chal_id = solves['solves'][i].chalid;
-            user_solves.push(chal_id);
+        for (var i = 0; i < chalids.length; i++) {
+            for (var z = 0; z < challenges['game'].length; z++) {
+                var obj = challenges['game'][z];
+                var solve_cnt = solves[chalids[i]];
+                if (obj.id == chalids[i]){
+                    if (solve_cnt) {
+                        obj.solves = solve_cnt;
+                    } else {
+                        obj.solves = 0;
+                    }
+                }
+            }
+        };
+        
+        load_user_solves(function () {
+            load_linear_unlocking();
+        });
 
-        }
         if (cb) {
             cb();
         }
-
-        load_linear_unlocking();
     });
 }
 
 function load_linear_unlocking() {
     $.get(script_root + '/linearunlockings', function(data) {
+        // Enable all challenge buttons first
+        $(".challenge-button").prop("disabled", false).css('cursor', '');
+
+        // Check and disable locked challenge buttons
         var linearunlockings = $.parseJSON(JSON.stringify(data));
 
         for (var i = linearunlockings['linearunlockings'].length - 1; i >= 0; i--) {
