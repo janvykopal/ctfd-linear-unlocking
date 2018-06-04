@@ -53,8 +53,6 @@ Users should not be able to bypass constraints (such as viewing locked challenge
 In `Challenges`, locked challenges are grayed out (or hidden). 
 You will not be able to view or attempt the challenge until the previous challenge in the chain is solved.
 
-In `Scoreboard`, locked challenges that are hidden will not show in the scoreboard.
-
 ### Challenge ordering
 
 In `Challenges`, challenges in a chain are always listed first within its challenge category, and sorted by the unlocking order of the challenges.

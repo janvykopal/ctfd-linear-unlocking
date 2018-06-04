@@ -12,7 +12,7 @@ from flask import (
 
 from sqlalchemy.sql import or_, expression
 from CTFd import utils, challenges
-from CTFd.models import db, Challenges, Solves, Tags, Files, Unlocks, Hints
+from CTFd.models import db, Challenges, Solves, Tags, Teams, Files, Unlocks, Hints
 from CTFd.utils import admins_only, is_admin, authed_only
 from CTFd.plugins.challenges import get_chal_class
 from CTFd.admin.challenges import admin_delete_chal
