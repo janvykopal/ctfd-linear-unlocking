@@ -1,31 +1,28 @@
-function updatesolves(cb){
-    $.get(script_root + '/chals/solves', function (data) {
-        var solves = $.parseJSON(JSON.stringify(data));
-        var chalids = Object.keys(solves);
+(function() {
+    try {
+        var old_renderSubmissionResponse = renderSubmissionResponse;
+        renderSubmissionResponse = function (data, cb) {
+            old_renderSubmissionResponse(data, cb);
+            update();
+        }
+    } catch (err) {
+        console.log('submitkey not defined');
+    }
 
-        for (var i = 0; i < chalids.length; i++) {
-            for (var z = 0; z < challenges['game'].length; z++) {
-                var obj = challenges['game'][z];
-                var solve_cnt = solves[chalids[i]];
-                if (obj.id == chalids[i]){
-                    if (solve_cnt) {
-                        obj.solves = solve_cnt;
-                    } else {
-                        obj.solves = 0;
-                    }
-                }
-            }
-        };
-        
-        load_user_solves(function () {
-            load_linear_unlocking();
-        });
-
-        if (cb) {
+    try {
+        var old_loadchals = loadchals;
+        loadchals = function(cb) {
+            old_loadchals(function() {
+                load_linear_unlocking();
+            });
+        }
+        if (cb){
             cb();
         }
-    });
-}
+    } catch (err) {
+        console.log('loadchals not defined');
+    }
+})();
 
 function load_linear_unlocking() {
     $.get(script_root + '/linearunlockings', function(data) {

@@ -64,7 +64,7 @@ $(document).ready(function(){
                 { "lu_id":this.value, "is_hide":hide, "nonce":$("#nonce").val() }, 
                 function(data) 
         {
-            location.reload(true);
+            window.location.href = window.location.href;
         });
     });
 });
