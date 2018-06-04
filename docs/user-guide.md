@@ -23,7 +23,7 @@ Admins should not tamper with the code on his web browser as it may cause undesi
 You can create a new chain.
 
 1. Under `Create new chain`, select the challenge category.
-1. Select the challenges to be unlocked in order. The first challenge is always unlocked and the subsequent challenges are locked until the one before is solved.
+1. Select the challenges to be unlocked in order. The first challenge is always unlocked and the subsequent challenges are locked until its previous challenge is solved.
 1. To add more challenges into the chain, click `Add Another Succeeding Challenge`.
 1. Click `Create`.
 
@@ -35,20 +35,20 @@ You can hide locked challenges in a chain from the user completely instead of gr
 
 ### Delete an existing chain
 
-You can delete an existing chain and remove the locked challenge constraints.
+You can delete an existing chain to remove the chain constraints.
 
 1. Under `Existing chains`, click `Delete` of the chain you would like to delete.
 
 ### Deleting a challenge
 
-When you delete a challenge that exists in a chain, the chain will automatically be deleted.
+When you delete a challenge that exists in a chain, the chain constraint will automatically be removed.
 
 ## As a User
 
 To access challenges: `CTFd` -> `Challenges`
 
-> Challenges are guarded both in the web interface and backend by this plugin. 
-Users should not be able to bypass constraints set by the admin by modifying his web browser, such as accessing locked challenges.
+> Locked challenges are guarded both in the web interface and backend by this plugin. 
+Users should not be able to bypass constraints (such as viewing locked challenges) set by the admin by modifying his web browser.
 
 ### Chains
 
