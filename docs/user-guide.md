@@ -1,4 +1,4 @@
-# User Guide: 
+# User Guide 
 
 Adds the capability to require challenges to be solved in a specific order.
 
@@ -15,12 +15,12 @@ A challenge is said to be unlocked for a user when it can be attempted by him.
 
 To configure challenges using this plugin: `CTFd` -> `Admin` -> `Plugins` -> `Linear Unlocking`
 
-> The admin system is guarded in the web interface using JavaScript, and not guarded in the backend. 
+> The admin system is guarded at the web interface using JavaScript, and not guarded at the backend. 
 Admins should not tamper with the code on his web browser as it may cause undesirable behaviors.
 
 ### Create a new chain
 
-You can create a new chain.
+You can create a new chain to require challenges to be solved in a specific order for all users.
 
 1. Under `Create new chain`, select the challenge category.
 1. Select the challenges to be unlocked in order. The first challenge is always unlocked and the subsequent challenges are locked until its previous challenge is solved.
@@ -45,15 +45,16 @@ When you delete a challenge that exists in a chain, the chain constraint will au
 
 ## As a User
 
-To access challenges: `CTFd` -> `Challenges`
-
-> Locked challenges are guarded both in the web interface and backend by this plugin. 
+> Locked challenges are guarded both at the web interface and backend by this plugin. 
 Users should not be able to bypass constraints (such as viewing locked challenges) set by the admin by modifying his web browser.
 
 ### Locked challenges
 
-Locked challenges are grayed out (or hidden). You will not be able to view or attempt the challenge until the previous challenge in the chain is solved.
+In `Challenges`, locked challenges are grayed out (or hidden). 
+You will not be able to view or attempt the challenge until the previous challenge in the chain is solved.
+
+In `Scoreboard`, locked challenges that are hidden will not show in the scoreboard.
 
 ### Challenge ordering
 
-Challenges in a chain are always listed first within its challenge category, and sorted by the unlocking order of the challenges.
+In `Challenges`, challenges in a chain are always listed first within its challenge category, and sorted by the unlocking order of the challenges.
