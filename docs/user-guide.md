@@ -13,7 +13,7 @@ A challenge is said to be unlocked for a user when it can be attempted by him.
 
 ## As an Admin
 
-`CTFd` -> `Admin` -> `Plugins` -> `Linear Unlocking`
+To configure challenges using this plugin: `CTFd` -> `Admin` -> `Plugins` -> `Linear Unlocking`
 
 > The admin system is guarded in the web interface using JavaScript, and not guarded in the backend. 
 Admins should not tamper with the code on his web browser as it may cause undesirable behaviors.
@@ -45,7 +45,7 @@ When you delete a challenge that exists in a chain, the chain will automatically
 
 ## As a User
 
-`CTFd` -> `Challenges`
+To access challenges: `CTFd` -> `Challenges`
 
 > Challenges are guarded both in the web interface and backend by this plugin. 
 Users should not be able to bypass constraints set by the admin by modifying his web browser, such as accessing locked challenges.
