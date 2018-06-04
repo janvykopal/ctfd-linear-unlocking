@@ -80,7 +80,8 @@
 				{% endfor %}
 			},
 		{% endfor %}
-	};				
+	};
+	var linearunlocking_used_chal_ids = [{% for lu_chain in linear_unlocking_chains %}{% for chain_entry in lu_chain.chain %}{{ chain_entry.chalid }}, {% endfor %}{% endfor %}];
 </script>
 <script src="{{ request.script_root }}/linear-unlocking/static/linear-unlocking-config.js"></script>
 {% endblock %}

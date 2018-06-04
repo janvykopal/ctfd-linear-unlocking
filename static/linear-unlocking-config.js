@@ -40,8 +40,12 @@ $(document).ready(function(){
     $("#linear_unlocking_create_form").submit(function(event) {
         var chal_ids = [];
         for (i = 0; i < count; i++) {
-            var chalid = $("#challenge-select-" + i).val();
-            if ($.inArray(chalid, chal_ids) > -1) {
+            var chalid = parseInt($("#challenge-select-" + i).val());
+            if (linearunlocking_used_chal_ids.indexOf(chalid) > -1) {
+                event.preventDefault();
+                alert("A challenge already exists in another existing chain.");
+                return;
+            } else if (chal_ids.indexOf(chalid) > -1) {
                 event.preventDefault();
                 alert("Duplicate challenges are not allowed in a single chain.");
                 return;
