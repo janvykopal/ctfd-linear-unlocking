@@ -2,10 +2,12 @@ $(document).ready(function(){
 
     var count = 0;
 
-    function addChallenge(category_name) {
+    function addChallenge(category_name, show_error=true) {
         var chals = challenge_categories[category_name];
         if (count >= Object.keys(chals).length) {
-            alert("Maximum number of challenges reached.");
+            if (show_error) {
+                alert("Maximum number of challenges reached.");
+            }
             return;
         }
 
@@ -61,8 +63,8 @@ $(document).ready(function(){
     function resetChallengeList(category_name) {
         $("#challenge-list").empty();
         count = 0;
-        addChallenge(category_name);
-        addChallenge(category_name);
+        addChallenge(category_name, show_error=false);
+        addChallenge(category_name, show_error=false);
         $("#add-challenge-button").val(category_name);
     }
     
