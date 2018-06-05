@@ -19,7 +19,11 @@ from CTFd.admin.challenges import admin_delete_chal
 
 class LinearUnlockingModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
     is_hidden = db.Column(db.Boolean, server_default=expression.false(), nullable=False)
+
+    def __init__(self, name):
+        self.name = name
 
 class LinearUnlockingEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -83,6 +87,7 @@ def load(app):
             lu_entries = LinearUnlockingEntry.query.filter_by(linearunlockid=lu_model.id).all()
             entry = {  
                 'id':lu_model.id,
+                'name':lu_model.name,
                 'is_hidden':lu_model.is_hidden,
                 'chain':[]
             }
@@ -100,6 +105,7 @@ def load(app):
     def admin_config_view():
         if request.method == 'POST':
             lu_chain = []
+            lu_name = request.form['name']
             for i in range(len(request.form)):
                 challenge_name = 'challenge[{}]'.format(i)
                 if challenge_name in request.form:
@@ -109,7 +115,7 @@ def load(app):
                     break
 
             if len(lu_chain) >= 2:
-                lu = LinearUnlockingModel()
+                lu = LinearUnlockingModel(lu_name)
                 db.session.add(lu)
                 db.session.commit()
                 lu_id = lu.id
