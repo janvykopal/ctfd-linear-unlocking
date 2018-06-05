@@ -10,12 +10,13 @@ from flask import (
     session
 )
 
-from sqlalchemy.sql import or_, expression
 from CTFd import utils, challenges
 from CTFd.models import db, Challenges, Solves, Tags, Teams, Files, Unlocks, Hints
 from CTFd.utils import admins_only, is_admin, authed_only
 from CTFd.plugins.challenges import get_chal_class
 from CTFd.admin.challenges import admin_delete_chal
+
+from sqlalchemy.sql import or_, expression
 
 class LinearUnlockingModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -243,6 +244,7 @@ def load(app):
         for chal in db_chals:
             # Skip if is linear locked and should be hidden
             lu_id = -1
+            lu_name = "__NOT_IN_ANY_CHAIN__"
             lu_position = -1
             is_hidden = False
             lu_entries = LinearUnlockingEntry.query.filter_by(chalid=chal.id).all()
@@ -251,6 +253,7 @@ def load(app):
                 if lu_id == -1:
                     lu_model = LinearUnlockingModel.query.filter_by(id=lu_entry.linearunlockid).first()
                     lu_id = lu_model.id
+                    lu_name = lu_model.name
                     lu_position = lu_entry.position
 
                 if lu_entry.requires_chalid > -1 and lu_entry.requires_chalid not in solve_ids:
@@ -271,19 +274,23 @@ def load(app):
                     'category': chal.category,
                     'tags': tags,
                     'template': chal_type.templates['modal'],
-                    'script': chal_type.scripts['modal'],}
+                    'script': chal_type.scripts['modal'],
+                    # Add more info for chain presentation
+                    'chainid': lu_id,
+                    'chainname': lu_name,
+                    'chainposition': lu_position,
+                    }
             if lu_id > -1:
                 if lu_id not in linearunlock_games:
                     linearunlock_games[lu_id] = []
-                linearunlock_games[lu_id].append((lu_position, game))
+                linearunlock_games[lu_id].append(game)
             else:
                 other_games.append(game)
 
         # Add all linear unlock chain challenges in sorted order first
         for lu_id, lu_chain_games in linearunlock_games.iteritems():
-            lu_chain_games.sort(key=lambda x: x[0])
-            for position, game in lu_chain_games:
-                response['game'].append(game)
+            lu_chain_games.sort(key=lambda x: x['chainposition'])
+            response['game'].extend(lu_chain_games)
         # Then add all other games that are not in any chain
         response['game'].extend(other_games)
 

@@ -10,9 +10,8 @@
     }
 
     try {
-        var old_loadchals = loadchals;
         loadchals = function(cb) {
-            old_loadchals(function() {
+            new_loadchals(function() {
                 load_linear_unlocking();
             });
         }
@@ -41,6 +40,105 @@ function load_linear_unlocking() {
             if (reqid != -1 && user_solves.indexOf(reqid) == -1) {
                 $("#" + wrapperid + " button").prop("disabled", true).css('cursor', 'not-allowed');
             }
+        }
+    });
+}
+
+function new_loadchals(cb) {
+    $.get(script_root + "/chals", function (data) {
+        var categories = [];
+        var chainids = [];
+        challenges = $.parseJSON(JSON.stringify(data));
+
+        $('#challenges-board').empty();
+
+        for (var i = 0; i <= challenges['game'].length - 1; i++) {
+            var chalinfo = challenges['game'][i];
+            chalinfo.solves = 0;
+
+            if ($.inArray(chalinfo.category, categories) == -1) {
+                var category = chalinfo.category;
+                categories.push(category);
+
+                var categoryid = category.replace(/ /g,"-").hashCode();
+                var categoryrow = $('' +
+                    '<div id="{0}-row" class="pt-5">'.format(categoryid) +
+                        '<div class="category-header col-md-12 mb-3">' +
+                        '</div>' +
+                        '<div class="category-challenges col-md-12">' +
+                            '<div class="challenges-row col-md-12"></div>' +
+                        '</div>' +
+                    '</div>');
+                categoryrow.find(".category-header").append($("<h3>"+ category +"</h3>"));
+
+                $('#challenges-board').append(categoryrow);
+            }
+
+            var chainid = chalinfo.chainid;
+            if ($.inArray(chainid, chainids) == -1) {
+                chainids.push(chainid);
+                var catid = chalinfo.category.replace(/ /g,"-").hashCode();
+                var chainname = chainid >= 0 ? chalinfo.chainname : "";
+
+                var chainrow = $("<div>", {
+                    "id" : chainid + "-chain-row",
+                    "class" : "row",
+                    "style" : "align-items:center;",
+                });
+                var chainrowlabel = $("<p>", {
+                    "class" : "col-md-1 p-0 text-right",
+                    "html" : chainname,
+                });
+                var chalbuttonswrap = $("<div>", {
+                    "class" : "chal-buttons col-md-11 p-0",
+                });
+                
+                chainrow.append(chainrowlabel);
+                chainrow.append(chalbuttonswrap);
+                $("#"+ catid +"-row").find(".category-challenges > .challenges-row").append(chainrow).append("<hr>");
+            }
+        }
+
+        for (var i = 0; i <= challenges['game'].length - 1; i++) {
+            var chalinfo = challenges['game'][i];
+            var challenge = chalinfo.category.replace(/ /g,"-").hashCode();
+            var chalid = chalinfo.name.replace(/ /g,"-").hashCode();
+            var catid = chalinfo.category.replace(/ /g,"-").hashCode();
+            var chainid = chalinfo.chainid;
+            var chalwrap = $("<div id='{0}' class='col-md-3 d-inline-block'></div>".format(chalid));
+
+            if (user_solves.indexOf(chalinfo.id) == -1){
+                var chalbutton = $("<button class='btn btn-dark challenge-button w-100 text-truncate pt-3 pb-3 mb-2' value='{0}'></button>".format(chalinfo.id));
+            } else {
+                var chalbutton = $("<button class='btn btn-dark challenge-button solved-challenge w-100 text-truncate pt-3 pb-3 mb-2' value='{0}'><i class='fas fa-check corner-button-check'></i></button>".format(chalinfo.id));
+            }
+
+            var chalchainposition = $("<span>{0}</span>".format(chalinfo.chainposition + "."));
+            var chalheader = $("<p>{0}</p>".format(chalinfo.name));
+            var chalscore = $("<span>{0}</span>".format(chalinfo.value));
+            for (var j = 0; j < chalinfo.tags.length; j++) {
+                var tag = 'tag-' + chalinfo.tags[j].replace(/ /g, '-');
+                chalwrap.addClass(tag);
+            }
+
+            if (chainid > -1)
+                chalbutton.append(chalchainposition);
+            chalbutton.append(chalheader);
+            chalbutton.append(chalscore);
+            chalwrap.append(chalbutton);
+
+            $("#"+ catid +"-row").find(".category-challenges > .challenges-row > #" + 
+                                        chainid + "-chain-row > .chal-buttons").append(chalwrap);
+        };
+
+        // marksolves();
+
+        $('.challenge-button').click(function (e) {
+            loadchal(this.value);
+        });
+
+        if (cb){
+            cb();
         }
     });
 }

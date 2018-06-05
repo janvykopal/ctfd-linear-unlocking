@@ -3,12 +3,17 @@ $(document).ready(function(){
     var count = 0;
 
     function addChallenge(category_name) {
+        var chals = challenge_categories[category_name];
+        if (count >= Object.keys(chals).length) {
+            alert("Maximum number of challenges reached.");
+            return;
+        }
+
         var $sel = $("<select>", {
             "id" : "challenge-select-" + count,
             "class" : "form-control",
             "name" : "challenge[" + count + "]"
         });
-        var chals = challenge_categories[category_name];
         $.each(chals, function(key, value) {
             $sel.append($("<option>").attr("value", key).text(value));
         });
