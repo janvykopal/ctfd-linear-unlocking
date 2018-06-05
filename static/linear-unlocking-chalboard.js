@@ -75,9 +75,9 @@ function new_loadchals(cb) {
             }
 
             var chainid = chalinfo.chainid;
-            if ($.inArray(chainid, chainids) == -1) {
-                chainids.push(chainid);
-                var catid = chalinfo.category.replace(/ /g,"-").hashCode();
+            var catid = chalinfo.category.replace(/ /g,"-").hashCode();
+            if ($.inArray(catid + chainid, chainids) == -1) {
+                chainids.push(catid + chainid);
                 var chainname = chainid >= 0 ? chalinfo.chainname : "";
 
                 var chainrow = $("<div>", {
