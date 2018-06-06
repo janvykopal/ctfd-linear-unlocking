@@ -28,7 +28,7 @@
 				<form id="linear_unlocking_create_form" method="POST" action="/admin/plugins/linear-unlocking" style="display:none">
 					<div class="form-group">
 						<label for="name">Name</label>
-						<input class="form-control" name="name" placeholder="Enter chain name" type="text">
+						<input pattern=".{1,}" required class="form-control" name="name" placeholder="Enter chain name" type="text">
 					</div>
 
 					<label>Challenges to be unlocked in order</label>

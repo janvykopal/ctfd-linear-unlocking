@@ -115,7 +115,7 @@ def load(app):
                 else:
                     break
 
-            if len(lu_chain) >= 2:
+            if len(lu_name) >= 1 and len(lu_chain) >= 2:
                 lu = LinearUnlockingModel(lu_name)
                 db.session.add(lu)
                 db.session.commit()
