@@ -103,7 +103,7 @@ def load(app):
 
     @app.route('/admin/plugins/linear-unlocking', methods=['GET', 'POST'])
     @admins_only
-    def admin_config_view():
+    def linear_unlocking_config_view():
         if request.method == 'POST':
             lu_chain = []
             lu_name = request.form['name']
