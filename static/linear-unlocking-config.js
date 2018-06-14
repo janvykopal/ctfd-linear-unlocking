@@ -106,6 +106,23 @@ $(document).ready(function(){
         }
     });
 
+    $("body").on('click', 'button.linear_unlocking_delete', function(e) {
+        e.preventDefault();
+        var button = $(this);
+        var data = $("<input>")
+               .attr("type", "hidden")
+               .attr("name", "lu_id").val(button.val());
+        ezq({
+            title: "Delete Chain",
+            body: "Are you sure you want to delete this chain?",
+            success: function() {
+                var form = button.parents('form:first');
+                form.append(data);
+                form.submit();
+            }
+        });
+    });
+
     $(".toggle_hide").click(function(e) {
         e.preventDefault();
         e.stopPropagation();

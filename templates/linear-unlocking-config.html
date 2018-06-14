@@ -58,9 +58,9 @@
 								Hide locked challenges
 							</div>
 
-							<form id="linear_unlocking_delete_form" method="POST" action="/admin/plugins/linear-unlocking/delete">
+							<form method="POST" action="/admin/plugins/linear-unlocking/delete">
 								<input id="nonce" name='nonce' type='hidden' value="{{ nonce }}">
-								<button name="lu_id" value="{{ lu_chain.id }}" class="btn btn-danger float-right linear-unlocking-delete-button" type="submit">Delete</button>
+								<button value="{{ lu_chain.id }}" class="btn btn-danger float-right linear_unlocking_delete" type="submit">Delete</button>
 							</form>
 						</div>
 						
@@ -80,17 +80,17 @@
 {% endblock %}
 
 {% block scripts %}
-<script type="text/javascript">
-	var challenge_categories = {
-		{% for cat in challenge_categories %}
-			"{{ cat.name }}":{
-				{% for chal in cat.challenges %}
-					{{ chal.id }}:"{{ chal.name }}",
-				{% endfor %}
-			},
-		{% endfor %}
-	};
-	var linearunlocking_used_chal_ids = [{% for lu_chain in linear_unlocking_chains %}{% for chain_entry in lu_chain.chain %}{{ chain_entry.chalid }}, {% endfor %}{% endfor %}];
-</script>
-<script src="{{ request.script_root }}/linear-unlocking/static/linear-unlocking-config.js"></script>
+	<script type="text/javascript">
+		var challenge_categories = {
+			{% for cat in challenge_categories %}
+				"{{ cat.name }}":{
+					{% for chal in cat.challenges %}
+						{{ chal.id }}:"{{ chal.name }}",
+					{% endfor %}
+				},
+			{% endfor %}
+		};
+		var linearunlocking_used_chal_ids = [{% for lu_chain in linear_unlocking_chains %}{% for chain_entry in lu_chain.chain %}{{ chain_entry.chalid }}, {% endfor %}{% endfor %}];
+	</script>
+	<script src="{{ request.script_root }}/linear-unlocking/static/linear-unlocking-config.js"></script>
 {% endblock %}
