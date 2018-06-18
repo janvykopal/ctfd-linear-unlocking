@@ -6,7 +6,7 @@
             update();
         }
     } catch (err) {
-        console.log('submitkey not defined');
+        console.log('renderSubmissionResponse not defined');
     }
 
     try {
@@ -23,6 +23,9 @@
     }
 })();
 
+/*
+ *  To unlock challenges when prerequisites are solved
+ */
 function load_linear_unlocking() {
     $.get(script_root + '/linearunlockings', function(data) {
         // Enable all challenge buttons first
@@ -44,6 +47,9 @@ function load_linear_unlocking() {
     });
 }
 
+/*
+ *  To sort challenges by chains
+ */
 function new_loadchals(cb) {
     $.get(script_root + "/chals", function (data) {
         var categories = [];
