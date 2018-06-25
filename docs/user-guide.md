@@ -1,7 +1,5 @@
 # User Guide 
 
-Adds the capability to require challenges to be solved in a specific order.
-
 > **Chain:** <br> 
 We define chain as a list of challenges that must be solved in order. 
 Each chain must be linear (has only one path) and no challenge can exist more than once across all chains.
