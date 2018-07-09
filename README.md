@@ -8,6 +8,12 @@ Specifies linear chains of challenges which must be solved in order.
 
 For instructors to provide an incremental approach to solving a challenge topic.
 
+## Install
+
+Copy or clone this repository into CTFd/plugins:
+
+`git clone https://github.com/nus-ncl/ctfd-linear-unlocking.git`
+
 ## Features
 
 - Create/delete linear chains of unlockable challenges easily
