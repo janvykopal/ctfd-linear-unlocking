@@ -12,7 +12,7 @@ For instructors to provide an incremental approach to solving a challenge topic.
 
 Copy or clone this repository into CTFd/plugins:
 
-`git clone https://github.com/nus-ncl/ctfd-linear-unlocking.git`
+`git clone https://github.com/janvykopal/ctfd-linear-unlocking.git`
 
 ## Features
 
@@ -27,3 +27,7 @@ Copy or clone this repository into CTFd/plugins:
 ![Admin panel view](/docs/screenshot_1.png)
 
 ![Challenges view](/docs/screenshot_2.png)
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
